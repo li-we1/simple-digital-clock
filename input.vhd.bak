@@ -1,0 +1,15 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+entity input is
+port( CLK_in : in std_logic;
+		LD_hour,LD_minute,P,CR : in std_logic;
+		LD_hour_out,LD_minute_out,P_out,CR_out : out std_logic);
+end input;
+architecture beh of input is
+signal hour,minute,pause,clean : std_logic;
+begin
+process(CLK_in)
+variable i : integer :=0;
+begin

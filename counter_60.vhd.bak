@@ -1,0 +1,41 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.std_logic_unsigned.all;
+entity counter is
+port(CLK : in std_logic;
+	  CR,LD, P: in std_logic;
+	  data_in : in std_logic_vector(7 downto 0);
+	  data_out : out std_logic_vector(7 downto 0);
+	  QCC : out std_logic);
+end counter;
+architecture beh of counter is
+signal data : std_logic_vector(7 downto 0) := "00000000";
+signal C : std_logic := '0';
+begin
+process(CLK)
+variable step : std_logic_vector(3 downto 0) := "0001";
+begin
+	if (P = '1') then
+		if(CR='0') then
+			data <= (others=>'0');
+		elsif(LD='0') then
+			data <= "00010100";
+		elsif(rising_edge(CLk)) then
+			C <= '0';
+			if(CONV_INTEGER(data(3 downto 0)) >= 9) then
+				data(3 downto 0) <= (others=>'0');
+				data(7 downto 4) <= data(7 downto 4) + step;
+			else 
+				data(3 downto 0) <= data(3 downto 0) + step;
+			end if;
+			if(CONV_INTEGER(data(7 downto 4)) >= 5 and CONV_INTEGER(data(3 downto 0))>=9) then
+				C <= '1';
+				data <= (others=>'0');
+			end if;
+		end if;
+	end if;
+end process;
+QCC <= C;
+data_out <= data;
+end beh;
